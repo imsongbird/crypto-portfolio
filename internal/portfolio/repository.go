@@ -1,5 +1,9 @@
 package portfolio
 
+type Repository struct {
+	coins []Coin
+}
+
 func (r *Repository) GetAll() []Coin {
 	return r.coins
 }
@@ -15,4 +19,8 @@ func (r *Repository) RemoveCoin(id int32) {
 			break
 		}
 	}
+}
+
+func NewRepository() *Repository {
+	return &Repository{}
 }

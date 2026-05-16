@@ -5,15 +5,3 @@ type Coin struct {
 	Symbol string
 	Amount float64
 }
-
-type Service struct {
-	repo Storage
-}
-
-type Handler struct {
-	service ServiceInterface
-}
-
-type Repository struct {
-	coins []Coin
-}
