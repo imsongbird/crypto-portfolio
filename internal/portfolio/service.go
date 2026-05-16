@@ -1,9 +1,5 @@
 package portfolio
 
-type Service struct {
-	repo Storage
-}
-
 func (s *Service) GetAll() []Coin {
 	return s.repo.GetAll()
 }

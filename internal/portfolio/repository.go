@@ -1,15 +1,5 @@
 package portfolio
 
-type Repository struct {
-	coins []Coin
-}
-
-type Storage interface {
-	GetAll() []Coin
-	AddCoin(coin Coin)
-	RemoveCoin(id int32)
-}
-
 func (r *Repository) GetAll() []Coin {
 	return r.coins
 }
