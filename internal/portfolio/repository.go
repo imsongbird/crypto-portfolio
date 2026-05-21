@@ -1,26 +1,47 @@
 package portfolio
 
+import "database/sql"
+
 type Repository struct {
-	coins []Coin
+	db *sql.DB
 }
 
-func (r *Repository) GetAll() []Coin {
-	return r.coins
-}
-
-func (r *Repository) AddCoin(coin Coin) {
-	r.coins = append(r.coins, coin)
-}
-
-func (r *Repository) RemoveCoin(id int32) {
-	for i, coin := range r.coins {
-		if coin.ID == id {
-			r.coins = append(r.coins[:i], r.coins[i+1:]...)
-			break
-		}
+func (r *Repository) GetAll() ([]Coin, error) {
+	rows, err := r.db.Query("SELECT id, symbol, amount FROM coins")
+	if err != nil {
+		return nil, err
 	}
+	defer rows.Close()
+
+	var coins []Coin
+	for rows.Next() {
+		var coin Coin
+		err := rows.Scan(&coin.ID, &coin.Symbol, &coin.Amount)
+		if err != nil {
+			return nil, err
+		}
+		coins = append(coins, coin)
+	}
+
+	return coins, nil
 }
 
-func NewRepository() *Repository {
-	return &Repository{}
+func (r *Repository) AddCoin(coin Coin) error {
+	_, err := r.db.Exec("INSERT INTO coins (symbol, amount) VALUES ($1, $2)", coin.Symbol, coin.Amount)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (r *Repository) RemoveCoin(id int32) error {
+	_, err := r.db.Exec("DELETE FROM coins WHERE id = $1", id)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func NewRepository(db *sql.DB) *Repository {
+	return &Repository{db: db}
 }

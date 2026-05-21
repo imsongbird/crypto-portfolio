@@ -1,0 +1,5 @@
+CREATE TABLE IF NOT EXISTS coins (
+    id     SERIAL PRIMARY KEY,
+    symbol VARCHAR(10) NOT NULL,
+    amount FLOAT NOT NULL
+);
